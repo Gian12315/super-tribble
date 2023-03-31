@@ -49,11 +49,7 @@ class auth_plugin_faceid extends auth_plugin_base {
      * @return bool Authentication success or failure.
      */
     function user_login ($username, $password) {
-        global $CFG, $DB;
-        if ($user = $DB->get_record('user', array('username'=>$username, 'mnethostid'=>$CFG->mnet_localhost_id))) {
-            return validate_internal_user_password($user, $password);
-        }
-        return true;
+        return false;
     }
 
     function prevent_local_passwords() {
@@ -88,22 +84,38 @@ class auth_plugin_faceid extends auth_plugin_base {
     }
 
     function loginpage_hook() {
-        global $PAGE, $OUTPUT, $CFG;
+        global $PAGE, $OUTPUT, $CFG, $DB;
 
-        $PAGE->requires->jquery();
+
         $cont = <<<HTML
-                <!-- Elcentra content starts -->
                 <div class="faceproviderlink">
                     <a href="{$CFG->wwwroot}/auth/faceid/client/index.html">FaceID</a>
                 </div>
-                <!-- Elcentra content ends -->
         HTML;
+
+        $id = optional_param('id', '', PARAM_TEXT);
+        $token = optional_param('password', array(), PARAM_TEXT);
+        if (!empty($token)) {
+            if ($user = $DB->get_record('user', ['id' => $id])) {
+                print_r($user);
+        $cont = <<<HTML
+            Eso tilin
+        HTML;
+                if ($user->password == $token) {
+                complete_user_login($user);
+                }
+            } else { }
+        }
+
+        $PAGE->requires->jquery();
 
         $PAGE->requires->js_init_code("buttonsAddMethod = 'auto';");
         $content = str_replace(array("\n", "\r"), array("\\\n", "\\\r"), $cont);
         $PAGE->requires->css('/auth/faceid/style.css');
         $PAGE->requires->js_init_code("buttonsCode = '$content';");
         $PAGE->requires->js(new moodle_url($CFG->httpswwwroot . "/auth/faceid/script.js"));
+
+
 
     }
 
