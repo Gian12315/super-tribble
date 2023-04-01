@@ -84,7 +84,7 @@ class auth_plugin_faceid extends auth_plugin_base {
     }
 
     function loginpage_hook() {
-        global $PAGE, $OUTPUT, $CFG, $DB;
+        global $PAGE, $OUTPUT, $CFG, $DB, $USER, $SESSION;
 
 
         $cont = <<<HTML
@@ -94,17 +94,31 @@ class auth_plugin_faceid extends auth_plugin_base {
         HTML;
 
         $id = optional_param('id', '', PARAM_TEXT);
-        $token = optional_param('password', array(), PARAM_TEXT);
+        $token = optional_param('password', '', PARAM_TEXT);
+        error_log("We got here bro");
+        error_log($id);
+        error_log($token);
         if (!empty($token)) {
             if ($user = $DB->get_record('user', ['id' => $id])) {
-                print_r($user);
-        $cont = <<<HTML
-            Eso tilin
-        HTML;
-                if ($user->password == $token) {
-                complete_user_login($user);
+                // error_log($user);
+                if ($usr->password == $token) {
+                    error_log("DB Password: " . $usr->password);
+                    error_log("Sent Password: " . $token);
+                complete_user_login($usr);
+    	if (user_not_fully_set_up($USER)) {
+    		$urltogo = $CFG->wwwroot.'/user/edit.php';
+    		// We don't delete $SESSION->wantsurl yet, so we get there later
+    	} else if (isset($SESSION->wantsurl) and (strpos($SESSION->wantsurl, $CFG->wwwroot) === 0)) {
+    		$urltogo = $SESSION->wantsurl;    // Because it's an address in this site
+    		unset($SESSION->wantsurl);
+    	} else {
+    		// No wantsurl stored or external - go to homepage
+    		$urltogo = $CFG->wwwroot.'/';
+    		unset($SESSION->wantsurl);
+    	}
+    	redirect($urltogo);
                 }
-            } else { }
+            } 
         }
 
         $PAGE->requires->jquery();

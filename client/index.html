@@ -9,12 +9,16 @@
     <title>Document</title>
 </head>
 <body>
-    <input type="text" id="email">
+    <form action="http://localhost:8000/login" method="POST">
+        
+    <input type="text" id="email" name="email">
+    <input type="submit" value="Toma foto wn" id="takePhoto">
+    </form>
+
     <video id="webcam" autoplay playsinline width="640" height="480"></video>
     <canvas id="canvas" class="d-none"></canvas>
     <audio id="snapSound" src="audio/snap.wav" preload = "auto"></audio>
-    <input type="button" value="Toma foto wn" id="takePhoto">
     <img src="" alt="" id="userPicture">
-    <script src="./main.js"></script>
+    <!-- <script src="./main.js"></script> -->
 </body>
 </html>
