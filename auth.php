@@ -49,7 +49,8 @@ class auth_plugin_faceid extends auth_plugin_base {
      * @return bool Authentication success or failure.
      */
     function user_login ($username, $password) {
-        return false;
+        error_log("INVALID LOGIN NININI");
+        return true;
     }
 
     function prevent_local_passwords() {
@@ -84,42 +85,33 @@ class auth_plugin_faceid extends auth_plugin_base {
     }
 
     function loginpage_hook() {
-        global $PAGE, $OUTPUT, $CFG, $DB, $USER, $SESSION;
+        global $PAGE, $OUTPUT, $CFG, $DB, $SESSION; 
 
+        print_object($SESSION);
+        if (isset($SESSION->id) && isset($SESSION->password)) {
+            $id = $SESSION->id;
+            $token = $SESSION->password;
+
+            $SESSION->id = null;
+            $SESSION->password = null;
+
+            if ($usr = $DB->get_record('user', ['id' => $id, 'mnethostid' => $CFG->mnet_localhost_id])) {
+                error_log("ID: " . $id);
+                error_log("DB Password: " . $usr->password);
+                error_log("Sent Password: " . $token);
+                authenticate_user_login($usr->username, $token);
+                if(complete_user_login($usr)) {
+                    error_log("Success?");
+                }
+                redirect($CFG->wwwroot."/");
+            } 
+        } else {
 
         $cont = <<<HTML
                 <div class="faceproviderlink">
                     <a href="{$CFG->wwwroot}/auth/faceid/client/index.html">FaceID</a>
                 </div>
         HTML;
-
-        $id = optional_param('id', '', PARAM_TEXT);
-        $token = optional_param('password', '', PARAM_TEXT);
-        error_log("We got here bro");
-        error_log($id);
-        error_log($token);
-        if (!empty($token)) {
-            if ($user = $DB->get_record('user', ['id' => $id])) {
-                // error_log($user);
-                if ($usr->password == $token) {
-                    error_log("DB Password: " . $usr->password);
-                    error_log("Sent Password: " . $token);
-                complete_user_login($usr);
-    	if (user_not_fully_set_up($USER)) {
-    		$urltogo = $CFG->wwwroot.'/user/edit.php';
-    		// We don't delete $SESSION->wantsurl yet, so we get there later
-    	} else if (isset($SESSION->wantsurl) and (strpos($SESSION->wantsurl, $CFG->wwwroot) === 0)) {
-    		$urltogo = $SESSION->wantsurl;    // Because it's an address in this site
-    		unset($SESSION->wantsurl);
-    	} else {
-    		// No wantsurl stored or external - go to homepage
-    		$urltogo = $CFG->wwwroot.'/';
-    		unset($SESSION->wantsurl);
-    	}
-    	redirect($urltogo);
-                }
-            } 
-        }
 
         $PAGE->requires->jquery();
 
@@ -128,7 +120,7 @@ class auth_plugin_faceid extends auth_plugin_base {
         $PAGE->requires->css('/auth/faceid/style.css');
         $PAGE->requires->js_init_code("buttonsCode = '$content';");
         $PAGE->requires->js(new moodle_url($CFG->httpswwwroot . "/auth/faceid/script.js"));
-
+        }
 
 
     }

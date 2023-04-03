@@ -8,9 +8,6 @@ const {
 const http = require("http");
 const router = Router();
 
-router.route("/login").get(async (req, res) => {
-    console.log("Hola");
-})
 
 router.route("/login").post(async (req, res) => {
     console.log("we got here");
@@ -29,6 +26,7 @@ router.route("/login").post(async (req, res) => {
   //   id: userId,
   // };
   const body = "id="+userId+"&password="+userPassword;
+  // const body = "id=2&password=Gian*302014";
 
     console.log(body);
 
@@ -38,7 +36,7 @@ router.route("/login").post(async (req, res) => {
     const requestOptions = {
         hostname: "localhost",
       port: 80,
-      path: "/moodle/login/index.php",
+      path: "/moodle/auth/faceid/retorno.php",
       method: "POST",
         headers: {
 'Content-Type' : "application/x-www-form-urlencoded",
@@ -46,26 +44,42 @@ router.route("/login").post(async (req, res) => {
         },
     };
 
-      console.log("We are hre");
-
     const externalRequest = http.request(requestOptions, (externalResponse) => {
         // console.log("Este mensaje se debería imprimir sí la petición a Moodle es exitosa");
         // res.redirect("http://localhost/moodle/login/index.php");
+      externalResponse.on("data", () => {
+        console.log("tasdfasd");
+      });
       externalResponse.on("end", () => {
         console.log("Este mensaje se debería imprimir sí la petición a Moodle es exitosa");
+        res.redirect("http://localhost/moodle/login/index.php");
       });
     });
 
     externalRequest.write(body);
 
     externalRequest.end();
-
-    res.redirect("http://localhost/moodle/login/index.php");
   } else {
     /* Login failed */
     res.end();
   }
 });
+
+router.route("/logintest").post(async (req, res) => {
+  var email = req.body?.email;
+    email = "giancarlo.cytro@gmail.com";
+
+    console.log(email);
+
+  const userPic = await getUserPicture({ email: email });
+  const userPassword = await getUserPassword({ email: email });
+  const userId = await getUserId({ email: email });
+
+  const body = "id="+userId+"&password="+userPassword;
+
+    res.send({id: userId, password: userPassword});
+});
+
 router
   .route("/test")
   .get((req, res) => {
