@@ -87,7 +87,6 @@ class auth_plugin_faceid extends auth_plugin_base {
     function loginpage_hook() {
         global $PAGE, $OUTPUT, $CFG, $DB, $SESSION; 
 
-        print_object($SESSION);
         if (isset($SESSION->id) && isset($SESSION->password)) {
             $id = $SESSION->id;
             $token = $SESSION->password;
@@ -109,7 +108,7 @@ class auth_plugin_faceid extends auth_plugin_base {
 
         $cont = <<<HTML
                 <div class="faceproviderlink">
-                    <a href="{$CFG->wwwroot}/auth/faceid/client/index.html">FaceID</a>
+                    <a href="{$CFG->wwwroot}/auth/faceid/client/index.php">FaceID</a>
                 </div>
         HTML;
 
