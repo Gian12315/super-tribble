@@ -29,7 +29,7 @@ const compareFaces = async ({ photoTarget, photoSource }) => {
       TargetImage: {
         Bytes: encode(photoTarget),
       },
-      SimilarityThreshold: 10,
+      SimilarityThreshold: 80,
     });
     const data = await client.send(command);
 

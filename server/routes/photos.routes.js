@@ -12,6 +12,13 @@ const router = Router();
 router.route("/login").post(async (req, res) => {
   const uri = req.body?.uri;
   const email = req.body?.email;
+
+  console.log(`email: ${email}`);
+
+  if(uri === undefined) {
+    console.log("The uri is undefined");
+  }
+
   const userPic = await getUserPicture({ email: email });
 
   if (userPic === 0) {
