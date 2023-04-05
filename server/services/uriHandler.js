@@ -1,7 +1,9 @@
-const imageDataUri  = require('image-data-uri');
+const imageDataUri = require("image-data-uri");
 
-function saveImage({ uri, path }) {
-    imageDataUri.outputFile(uri, path);
+function saveImage({ uri }) {
+  const path = `${process.cwd}/tmp/test.png`;
+  imageDataUri.outputFile(uri, path);
+  return path;
 }
 
-exports.saveImage = saveImage
+exports.saveImage = saveImage;

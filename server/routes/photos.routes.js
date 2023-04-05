@@ -5,79 +5,55 @@ const {
   getUserPassword,
   getUserId,
 } = require("../services/querys.js");
-const http = require("http");
+const { compareFaces } = require("../services/faceMathcing.js");
+const { getProfileImageURL } = require("../services/profileImageFinder.js");
 const router = Router();
 
-
 router.route("/login").post(async (req, res) => {
-    console.log("we got here");
-  const uri = "foo";
-  // const uri = req.body?.uri;
+  const uri = req.body?.uri;
   const email = req.body?.email;
-    console.log(email);
-  // IMPORTANTE: Sí no cambias el nombre de cada imágen que se va a guardar, entonces esta se va a sobreescribir
-  // saveImage({ uri: uri, path: './test.png' });
   const userPic = await getUserPicture({ email: email });
+
+  if (userPic === 0) {
+    res.send(400);
+    res.end();
+  }
+
   const userPassword = await getUserPassword({ email: email });
   const userId = await getUserId({ email: email });
-  // const body = {
-  //   pic: userPic,
-  //   password: userPassword,
-  //   id: userId,
-  // };
-  const body = "id="+userId+"&password="+userPassword;
-  // const body = "id=2&password=Gian*302014";
 
-    console.log(body);
+  const imagePath = saveImage({ uri: uri });
 
-  // Correlation between photos up to 80%
-  if (true) {
-    // Make an http petititon to Moodle
-    const requestOptions = {
-        hostname: "localhost",
-      port: 80,
-      path: "/moodle/auth/faceid/retorno.php",
-      method: "POST",
-        headers: {
-'Content-Type' : "application/x-www-form-urlencoded",
-"Connection": "keep-alive"
-        },
-    };
+  const profileImagePath = getProfileImageURL({ imageID: userPic });
 
-    const externalRequest = http.request(requestOptions, (externalResponse) => {
-        // console.log("Este mensaje se debería imprimir sí la petición a Moodle es exitosa");
-        // res.redirect("http://localhost/moodle/login/index.php");
-      externalResponse.on("data", () => {
-        console.log("tasdfasd");
-      });
-      externalResponse.on("end", () => {
-        console.log("Este mensaje se debería imprimir sí la petición a Moodle es exitosa");
-        res.redirect("http://localhost/moodle/login/index.php");
-      });
-    });
+  const hasMatch = compareFaces({
+    photoSource: imagePath,
+    photoTarget: profileImagePath,
+  });
 
-    externalRequest.write(body);
-
-    externalRequest.end();
+  if (hasMatch) {
+    // Send the data
+    res.send({ id: userId, password: userPassword });
   } else {
     /* Login failed */
+    res.send(400);
     res.end();
   }
 });
 
 router.route("/logintest").post(async (req, res) => {
   var email = req.body?.email;
-    email = "giancarlo.cytro@gmail.com";
+  email = "giancarlo.cytro@gmail.com";
 
-    console.log(email);
+  console.log(email);
 
   const userPic = await getUserPicture({ email: email });
   const userPassword = await getUserPassword({ email: email });
   const userId = await getUserId({ email: email });
 
-  const body = "id="+userId+"&password="+userPassword;
+  const body = "id=" + userId + "&password=" + userPassword;
 
-    res.send({id: userId, password: userPassword});
+  res.send({ id: userId, password: userPassword });
 });
 
 router
