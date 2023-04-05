@@ -1,3 +1,4 @@
+const { downloadImageFromURL } = require("./imageDownloader.js");
 /**
  * Finds the profile image with a taken id in the Moodle fyle system
  *
@@ -16,7 +17,12 @@ function getProfileImageURL({ imageID }) {
   };
 
   const profileImagePath = `http://${path.host}:${path.port}/${path.route}=${path.id}`;
-  return profileImagePath;
+
+  const finalPath = `${process.cwd()}\\tmp\\profile.png`;
+
+  downloadImageFromURL(profileImagePath, finalPath);
+
+  return finalPath;
 }
 
 module.exports = {
