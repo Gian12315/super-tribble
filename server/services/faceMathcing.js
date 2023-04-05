@@ -35,7 +35,7 @@ const compareFaces = async ({ photoTarget, photoSource }) => {
 
     return data.FaceMatches.length != 0 && data.FaceMatches[0].Similarity > 80;
   } catch (error) {
-    console.log(err);
+    console.log(error);
   }
 };
 

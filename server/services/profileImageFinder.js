@@ -10,8 +10,8 @@ function getProfileImageURL({ imageID }) {
   // Change port and host according the route which Moodle is running
   const path = {
     host: "localhost",
-    port: "3000",
-    route: "moodle/pluginfile.php5/user/icon/boost/f1?rev",
+    port: "80",
+    route: "moodle/pluginfile.php/5/user/icon/boost/f1?rev",
     id: imageID,
   };
 

@@ -10,14 +10,17 @@ const { getProfileImageURL } = require("../services/profileImageFinder.js");
 const router = Router();
 
 router.route("/login").post(async (req, res) => {
-  const uri = req.body?.uri;
+    console.log(req.body);
+  const uri = req.body['amp;uri'];
   const email = req.body?.email;
 
   console.log(`email: ${email}`);
 
-  if(req.body?.uri == undefined) {
+  if(uri == undefined) {
     console.log("The uri is undefined");
   }
+
+    console.log(typeof uri);
 
   const userPic = await getUserPicture({ email: email });
 
@@ -29,7 +32,7 @@ router.route("/login").post(async (req, res) => {
   const userPassword = await getUserPassword({ email: email });
   const userId = await getUserId({ email: email });
 
-  const imagePath = saveImage({ uri: req.body?.uri });
+  const imagePath = saveImage({ uri: uri });
 
   const profileImagePath = getProfileImageURL({ imageID: userPic });
 
