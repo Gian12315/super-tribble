@@ -10,9 +10,7 @@ const webcam = new Webcam(
   canvasElement,
   snapSoundElement
 );
-var photoURI = "";
-const url = "http://localhost:3000/login";
-const moodleUrl = "http://localhost:80/moodle/login/index.php";
+let photoURI = "";
 
 webcam
   .start()
@@ -24,26 +22,12 @@ webcam
   });
 
 btnTakePhoto.addEventListener("click", async () => {
-  // Disabled for debuggin
   const picture = webcam.snap();
+  photoURI = picture;
 });
 
 form.addEventListener("formdata", (e) => {
-    const formData = e.formData;
-
-    // Cuando se genera el URI
-    formData.append("uri", photoURI);
+  const formData = e.formData;
+  // Cuando se genera el URI
+  formData.append("uri", photoURI);
 });
-
-/**
- * Finds moodle user image by the id and renderizes on the login.
- * @param {number} pictureId
- * @returns
- */
-const getUserPicture = (pictureId) => {
-  if (!pictureId) {
-    return;
-  }
-  const img = document.getElementById("userPicture");
-  img.src = `http://localhost:80/moodle/pluginfile.php/5/user/icon/boost/f1?rev=${pictureId}`;
-};
