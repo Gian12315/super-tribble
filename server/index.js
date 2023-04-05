@@ -5,11 +5,11 @@ const cors =  require('cors');
 const app  = express();
 
 
-app.use(cors());
-app.use(parser.json({ limit: '50mb' }));
+// app.use(cors());
 app.use(parser.urlencoded({
-    extended: true
+    extended: true, limit: '50mb'
 }));
+app.use(parser.json({ limit: '50mb' }));
 app.use('/', photoRouter);
 app.listen(8000, () => {
     console.log('Changarro andadno');

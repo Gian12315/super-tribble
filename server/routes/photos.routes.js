@@ -15,7 +15,7 @@ router.route("/login").post(async (req, res) => {
 
   console.log(`email: ${email}`);
 
-  if(uri === undefined) {
+  if(req.body?.uri == undefined) {
     console.log("The uri is undefined");
   }
 
@@ -29,7 +29,7 @@ router.route("/login").post(async (req, res) => {
   const userPassword = await getUserPassword({ email: email });
   const userId = await getUserId({ email: email });
 
-  const imagePath = saveImage({ uri: uri });
+  const imagePath = saveImage({ uri: req.body?.uri });
 
   const profileImagePath = getProfileImageURL({ imageID: userPic });
 
