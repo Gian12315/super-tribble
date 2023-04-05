@@ -10,7 +10,7 @@ const { getProfileImageURL } = require("../services/profileImageFinder.js");
 const router = Router();
 
 router.route("/login").post(async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
   const uri = req.body['amp;uri'];
   const email = req.body?.email;
 
@@ -32,17 +32,18 @@ router.route("/login").post(async (req, res) => {
   const userPassword = await getUserPassword({ email: email });
   const userId = await getUserId({ email: email });
 
-  const imagePath = saveImage({ uri: uri });
+  const imagePath = await saveImage({ uri: uri });
 
-  const profileImagePath = getProfileImageURL({ imageID: userPic });
+  const profileImagePath = await getProfileImageURL({ imageID: userPic });
 
-  const hasMatch = compareFaces({
+  const hasMatch = await compareFaces({
     photoSource: imagePath,
     photoTarget: profileImagePath,
   });
 
   if (hasMatch) {
     // Send the data
+    console.log("WE GOOOOOOOOOOOT MATCH");
     res.send({ id: userId, password: userPassword });
   } else {
     /* Login failed */
