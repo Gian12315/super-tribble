@@ -36,20 +36,25 @@ router.route("/login").post(async (req, res) => {
 
   const profileImagePath = await getProfileImageURL({ imageID: userPic });
 
-  const hasMatch = await compareFaces({
-    photoSource: imagePath,
-    photoTarget: profileImagePath,
-  });
+    const funfunfun = async () => {
+          const hasMatch = await compareFaces({
+            photoSource: imagePath,
+            photoTarget: profileImagePath,
+          });
 
-  if (hasMatch) {
-    // Send the data
-    console.log("WE GOOOOOOOOOOOT MATCH");
-    res.send({ id: userId, password: userPassword });
-  } else {
-    /* Login failed */
-    res.send(400);
-    res.end();
-  }
+          if (hasMatch) {
+            // Send the data
+            console.log("WE GOOOOOOOOOOOT MATCH");
+            res.send({ id: userId, password: userPassword });
+          } else {
+            /* Login failed */
+            res.send(400);
+            res.end();
+          }
+    }
+
+    setTimeout(funfunfun, 3000);
+
 });
 
 router.route("/logintest").post(async (req, res) => {

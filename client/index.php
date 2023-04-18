@@ -10,11 +10,12 @@ if (!empty($_POST)) {
     $ch = curl_init();
 
     // arreglo asociativo con los valores
-    $data = array("email" => $_POST['email']);
+    $data = array("email" => $_POST['email'], "uri" => $_POST['uri']);
+    var_dump($data);
 
     curl_setopt($ch, CURLOPT_URL, "localhost:8000/login");
     curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
     $result = curl_exec($ch);
@@ -42,7 +43,7 @@ if (!empty($_POST)) {
     <title>Document</title>
 </head>
 <body>
-    <form action="" method="POST" id="form">
+    <form method="POST" action="" id="form">
     <input type="text" id="email" name="email">
     <button type="button" id="takePhoto">Tomar foto</button>
     <input type="submit" value="Enviar" id="sendForm">
