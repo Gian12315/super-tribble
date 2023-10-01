@@ -5,14 +5,48 @@ $method = $_SERVER["REQUEST_METHOD"];
 
 switch($method) {
     case "POST":
-        $requestBody = json_decode(file_get_contents('php://input'), true);
-        $email = $requestBody["email"];
-        $uri = $requestBody["amp;uri"];
-        handleLogin($uri, $email);
+        $requestBody = file_get_contents('php://input');
+
+        list($email, $uri) = explode("&", $requestBody);
+        $email = urldecode(explode("=", $email)[1]);
+        $uri = urldecode(explode("=", $uri)[1]);
+
+        $file = fopen("logs.txt", "a");
+        file_put_contents("logs.txt", $uri);
+
+        $str = handleLogin($uri, $email);
+        echo(json_encode($str));
         break;
 }
 
 function handleLogin($uri, $email) {
-    echo("Test");
-    //exec(/**/);
+    if(!file_exists(getcwd()."/tmp")) {
+        mkdir("tmp");
+    }
+    $path = getcwd()."/faceIdHook.js";
+    $uriPath = getcwd()."/tmp/uri";
+
+    $file = fopen($uriPath,"a");
+    file_put_contents($uriPath, $uri);
+    $output = null;
+    $code = null;
+    exec("node ".$path." ".$email, $output, $code);
+    if($code != 0) {
+        return "Error";
+    }else {
+        $credentials = array_slice($output, 5, 2);
+        // id
+        $splittedId = explode(":", $credentials[0]);
+        $idTag = trim($splittedId[0]);
+        $tmp = trim($splittedId[1]);
+        $idValue = str_replace(",", "", $tmp);
+
+        // password
+        $splittedPassword = explode(":", $credentials[1]);
+        $paswordTag = trim($splittedPassword[0]);
+        $tmp = trim($splittedPassword[1]);
+        $passwordValue = str_replace("'", "", $tmp);
+
+        return array($idTag => $idValue, $paswordTag => $passwordValue);
+    }
 }

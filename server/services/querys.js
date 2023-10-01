@@ -25,11 +25,6 @@ const getUserPassword = async({email}) => {
     return res[0]?.password;
 }
 
-const functionHub = {
-    "getUserPicture": getUserPicture,
-    "getUserId": getUserId,
-    "getUserPassword": getUserPassword
-};
-
-const [fun, param] = process.argv.slice(2);
-functionHub[fun](param);
+exports.getUserPicture = getUserPicture;
+exports.getUserId = getUserId;
+exports.getUserPassword = getUserPassword;
