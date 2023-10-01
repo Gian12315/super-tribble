@@ -107,8 +107,8 @@ class auth_plugin_faceid extends auth_plugin_base {
         } else {
 
         $cont = <<<HTML
-                <div class="faceproviderlink">
-                    <a href="{$CFG->wwwroot}/auth/faceid/client/index.php">FaceID</a>
+                <div class="">
+                    <a href="{$CFG->wwwroot}/auth/faceid/client/index.php">Log in with FaceID</a>
                 </div>
         HTML;
 
