@@ -1,27 +1,21 @@
-const fs = require('fs'),
-http = require('http'),
-https = require('https');
+const fs = require('fs');
+const axios = require("axios");
   
-const Stream = require('stream').Transform;
-  
-const downloadImageFromURL = (url, filename, callback) => {
-  
-    const client = http;
-    if (url.toString().indexOf("https") === 0){
-      client = https;
-     }
-  
-    client.request(url, function(response) {                                        
-      const data = new Stream();                                                    
-  
-      response.on('data', function(chunk) {                                       
-         data.push(chunk);                                                         
-      });                                                                         
-  
-      response.on('end', function() {                                             
-         fs.writeFileSync(filename, data.read());                               
-      });                                                                         
-   }).end();
+const downloadImageFromURL = async (url, filename) => {
+   const res = await axios({
+      url,
+      method: "GET",
+      responseType: "stream"
+   })
+
+   const writer = fs.createWriteStream(filename);
+
+   res.data.pipe(writer);
+
+    return new Promise((resolve, reject) => {
+        writer.on('finish', resolve);
+        writer.on('error', reject);
+    });
 };
 
 module.exports = {

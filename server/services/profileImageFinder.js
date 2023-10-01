@@ -6,7 +6,7 @@ const { downloadImageFromURL } = require("./imageDownloader.js");
  * @returns The URL of the profile image
  */
 
-function getProfileImageURL({ imageID }) {
+async function getProfileImageURL({ imageID }) {
 
   // Change port and host according the route which Moodle is running
   const path = {
@@ -20,7 +20,7 @@ function getProfileImageURL({ imageID }) {
 
   const finalPath = `${process.cwd()}\\tmp\\profile.png`;
 
-  downloadImageFromURL(profileImagePath, finalPath);
+  await downloadImageFromURL(profileImagePath, finalPath);
 
   return finalPath;
 }

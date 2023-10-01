@@ -1,9 +1,9 @@
+require("dotenv").config();
 const {
   RekognitionClient,
   CompareFacesCommand,
 } = require("@aws-sdk/client-rekognition");
 const { encode } = require("./imageEncoder.js");
-require("dotenv").config();
 
 /**
  * Matches the similarity bewteen two images with help of AWS Rekognition
@@ -13,7 +13,6 @@ require("dotenv").config();
  * @returns A boolean determining if is the same person or not
  */
 const compareFaces = async ({ photoTarget, photoSource }) => {
-    console.log("Entramos paa");
   const client = new RekognitionClient({
     region: process.env.AWS_REGION,
     credentials: {
@@ -21,9 +20,6 @@ const compareFaces = async ({ photoTarget, photoSource }) => {
       secretAccessKey: process.env.AWS_SECRET_KEY,
     },
   });
-
-
-    console.log("Cliejntecrado");
 
   try {
     const command = new CompareFacesCommand({
@@ -36,8 +32,8 @@ const compareFaces = async ({ photoTarget, photoSource }) => {
       SimilarityThreshold: 80,
     });
     const data = await client.send(command);
-    console.log("Ya se envio el comando rey");
-      console.log(data);
+    //console.log("Ya se envio el comando rey");
+    //console.log(data);
 
     return data.FaceMatches.length != 0 && data.FaceMatches[0].Similarity > 80;
   } catch (error) {

@@ -1,3 +1,6 @@
+server/tmp
 server/node_modules
+server/logs
+.uri
 .env
-*.png
+.eslintrc.js
