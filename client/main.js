@@ -12,6 +12,8 @@ const webcam = new Webcam(
 );
 let photoURI = "";
 
+btnSendForm.disabled = true;
+
 webcam
   .start()
   .then(() => {
@@ -24,6 +26,8 @@ webcam
 btnTakePhoto.addEventListener("click", async () => {
   const picture = webcam.snap();
   photoURI = picture;
+  btnSendForm.className = `btn btn-lg btn-primary`;
+  btnSendForm.disabled = false;
 });
 
 form.addEventListener("formdata", (e) => {

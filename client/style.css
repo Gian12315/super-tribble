@@ -1,3 +1,51 @@
+body {
+    padding: 1rem;
+}
+
 canvas {
     display: none;
+}
+  
+form {
+    width: 100%;
+    max-width: 60%;
+    padding: 15px;
+    margin: 0 auto;
+    display: -ms-flexbox;
+    -ms-flex-direction: column;
+    display: -webkit-box;
+    -webkit-flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    -ms-flex-align: center;
+    -ms-flex-pack: center;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+}
+
+form .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+}
+
+form .form-control:focus {
+    z-index: 2;
+}
+
+form button[type="button"] {
+    border-top-left-radius: 0rem;
+}
+
+form button[type="submit"] {
+    border-top-right-radius: 0rem;
+}
+
+#webcam {
+    border: thin solid #000;
+    border-radius: 0.5rem;
 }
