@@ -11,9 +11,6 @@ switch($method) {
         $email = urldecode(explode("=", $email)[1]);
         $uri = urldecode(explode("=", $uri)[1]);
 
-        $file = fopen("logs.txt", "a");
-        file_put_contents("logs.txt", $uri);
-
         $str = handleLogin($uri, $email);
         echo(json_encode($str));
         break;
@@ -24,7 +21,7 @@ function handleLogin($uri, $email) {
         mkdir("tmp");
     }
     $path = getcwd()."/faceIdHook.js";
-    $uriPath = getcwd()."/tmp/uri";
+    $uriPath = getcwd()."/tmp/.uri";
 
     $file = fopen($uriPath,"a");
     file_put_contents($uriPath, $uri);

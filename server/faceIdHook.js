@@ -13,7 +13,7 @@ const { resolve } = require("path");
 const [email] = process.argv.slice(2);
 const auth = async (email) => {
 
-    const path = `${__dirname}/tmp/uri`;
+    const path = `${__dirname}/tmp/.uri`;
 
     let uri = "";
     try {
