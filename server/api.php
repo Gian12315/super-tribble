@@ -17,9 +17,16 @@ switch($method) {
 }
 
 function handleLogin($uri, $email) {
-    if(!file_exists(getcwd()."/tmp")) {
+
+    if(!file_exists(getcwd()."/server/tmp")) {
         mkdir("tmp");
     }
+
+    // Auto-install node_modules the first time that the plugins works
+    if(!file_exists(getcwd()."/server/node_modules")) {
+        exec("npm i");
+    }
+
     $path = getcwd()."/faceIdHook.js";
     $uriPath = getcwd()."/tmp/.uri";
 
