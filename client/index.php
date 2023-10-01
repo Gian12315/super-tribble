@@ -11,7 +11,7 @@ if (!empty($_POST)) {
 
     // arreglo asociativo con los valores
     $data = array("email" => $_POST['email'], "uri" => $_POST['uri']);
-    var_dump($data);
+    //var_dump($data);
 
     curl_setopt($ch, CURLOPT_URL, "localhost:8000/login");
     curl_setopt($ch, CURLOPT_POST, true);

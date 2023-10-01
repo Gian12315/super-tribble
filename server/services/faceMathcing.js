@@ -3,7 +3,6 @@ const {
   CompareFacesCommand,
 } = require("@aws-sdk/client-rekognition");
 const { encode } = require("./imageEncoder.js");
-require("dotenv").config();
 
 /**
  * Matches the similarity bewteen two images with help of AWS Rekognition
