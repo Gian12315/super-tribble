@@ -60,8 +60,15 @@ if (!empty($_POST)) {
     <br/>
 
     <div class="btn-group btn-block" role="group">
-    <button id="takePhoto" type="button" class="btn btn-lg btn-primary">Tomar foto</button>
-    <button id="sendForm" type="submit" class="btn btn-lg btn-secondary">Enviar</button>
+    <button id="takePhoto" type="button" class="btn btn-lg btn-primary">
+    <i class="bi bi-camera"></i>
+    Tomar foto
+    </button>
+
+    <button id="sendForm" type="submit" class="btn btn-lg btn-secondary">
+    <i class="bi bi-send"></i>
+    Enviar
+    </button>
     </div>
 
     </form>
