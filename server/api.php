@@ -18,12 +18,12 @@ switch($method) {
 
 function handleLogin($uri, $email) {
 
-    if(!file_exists(getcwd()."/server/tmp")) {
+    if(!file_exists(getcwd()."/tmp")) {
         mkdir("tmp");
     }
 
     // Auto-install node_modules the first time that the plugins works
-    if(!file_exists(getcwd()."/server/node_modules")) {
+    if(!file_exists(getcwd()."/node_modules")) {
         exec("npm i");
     }
 
