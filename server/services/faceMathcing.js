@@ -12,7 +12,8 @@ require("dotenv").config();
  *
  * @returns A boolean determining if is the same person or not
  */
-const compareFaces = async (photoTarget, photoSource) => {
+const compareFaces = async ({ photoTarget, photoSource }) => {
+    console.log("Entramos paa");
   const client = new RekognitionClient({
     region: process.env.AWS_REGION,
     credentials: {
@@ -20,6 +21,10 @@ const compareFaces = async (photoTarget, photoSource) => {
       secretAccessKey: process.env.AWS_SECRET_KEY,
     },
   });
+
+
+    console.log("Cliejntecrado");
+
   try {
     const command = new CompareFacesCommand({
       SourceImage: {
@@ -31,6 +36,8 @@ const compareFaces = async (photoTarget, photoSource) => {
       SimilarityThreshold: 80,
     });
     const data = await client.send(command);
+    console.log("Ya se envio el comando rey");
+      console.log(data);
 
     return data.FaceMatches.length != 0 && data.FaceMatches[0].Similarity > 80;
   } catch (error) {
@@ -38,5 +45,6 @@ const compareFaces = async (photoTarget, photoSource) => {
   }
 };
 
-const [photoTarget, photoSource] = process.argv.slice(2);
-compareFaces(photoTarget, photoSource);
+module.exports = {
+  compareFaces,
+};

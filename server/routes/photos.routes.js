@@ -1,4 +1,3 @@
-// This script is going to be deprecated
 const { Router } = require("express");
 const { saveImage } = require("../services/uriHandler.js");
 const {
@@ -11,6 +10,7 @@ const { getProfileImageURL } = require("../services/profileImageFinder.js");
 const router = Router();
 
 router.route("/login").post(async (req, res) => {
+    // console.log(req.body);
   const uri = req.body['amp;uri'];
   const email = req.body?.email;
 
@@ -20,7 +20,7 @@ router.route("/login").post(async (req, res) => {
     console.log("The uri is undefined");
   }
 
-  console.log(typeof uri);
+    console.log(typeof uri);
 
   const userPic = await getUserPicture({ email: email });
 
@@ -44,6 +44,7 @@ router.route("/login").post(async (req, res) => {
 
           if (hasMatch) {
             // Send the data
+            console.log("WE GOOOOOOOOOOOT MATCH");
             res.send({ id: userId, password: userPassword });
           } else {
             /* Login failed */
