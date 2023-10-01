@@ -1,7 +1,4 @@
-*
-!/**/
-!*.*
 server/tmp
 server/node_modules
+*.txt
 .env
-server/logs.txt
