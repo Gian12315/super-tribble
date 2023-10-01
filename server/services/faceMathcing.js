@@ -44,6 +44,5 @@ const compareFaces = async ({ photoTarget, photoSource }) => {
   }
 };
 
-module.exports = {
-  compareFaces,
-};
+const [photoTarget, photoSource] = process.argv.slice(2);
+compareFaces(photoTarget, photoSource);
