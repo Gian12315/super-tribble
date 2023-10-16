@@ -11,6 +11,14 @@ switch($method) {
         $email = urldecode(explode("=", $email)[1]);
         $uri = urldecode(explode("=", $uri)[1]);
 
+        $log = fopen("./logs", "w");
+
+        $content = "";
+
+        fwrite($log, $requestBody);
+
+        fclose($log);
+
         $str = handleLogin($uri, $email);
         echo(json_encode($str));
         break;
