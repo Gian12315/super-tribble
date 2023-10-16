@@ -30,6 +30,19 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_heading('auth_faceid/pluginname', '',
         new lang_string('auth_faceiddescription', 'auth_faceid')));
 
+    // AWS and Database settings
+
+    $settings->add(new admin_setting_configtext('auth_faceid/aws_region', 'AWS Region', '', '', PARAM_ALPHANUMEXT));
+    $settings->add(new admin_setting_configtext('auth_faceid/aws_public_key', 'AWS Public Key', '', '', PARAM_ALPHANUM));
+    $settings->add(new admin_setting_configtext('auth_faceid/aws_secret_key', 'AWS Secret Key', '', '', PARAM_ALPHANUM));
+    $settings->add(new admin_setting_configtext('auth_faceid/db_dialect', 'Database Dialect', '', 'mysql', PARAM_ALPHANUM));
+    $settings->add(new admin_setting_configtext('auth_faceid/db_host', 'Database host', '', 'localhost', PARAM_LOCALURL));
+    $settings->add(new admin_setting_configtext('auth_faceid/db_name', 'Database name', '', 'moodle', PARAM_ALPHANUM));
+    $settings->add(new admin_setting_configtext('auth_faceid/db_user', 'Database username', '', 'root', PARAM_ALPHANUM));
+    $settings->add(new admin_setting_configtext('auth_faceid/db_password', 'Database password', '', '', PARAM_ALPHANUMEXT));
+
+
+
     // Display locking / mapping of profile fields.
     $authplugin = get_auth_plugin('faceid');
     // display_auth_lock_options($settings, $authplugin->authtype, $authplugin->userfields,
