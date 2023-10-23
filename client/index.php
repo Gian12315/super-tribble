@@ -46,7 +46,7 @@ if (!empty($_POST)) {
     <form method="POST" action="" id="form">
     <h1 class="h2 mb-3 text-cemter font-weight-normal">FaceID Login</h1>
 
-    <input id="email" type="email" class="form-control" placeholder="correo@correo.com" required autofocus>
+    <input id="email" type="email" name="email" class="form-control" placeholder="correo@correo.com" required autofocus>
     
     <br>
 
