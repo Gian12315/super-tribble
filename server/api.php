@@ -1,5 +1,13 @@
 <?php
+
+require_once("./vendor/autoload.php");
+
 header("Conten-Type:application/json");
+
+use Stormwind\FaceAnalyzer;
+use Stormwind\QueryHandler;
+use Stormwind\ImageHandler;
+use Dotenv\Dotenv;
 
 $method = $_SERVER["REQUEST_METHOD"];
 
@@ -13,8 +21,6 @@ switch($method) {
 
         $log = fopen("./logs", "w");
 
-        $content = "";
-
         fwrite($log, $requestBody);
 
         fclose($log);
@@ -26,39 +32,42 @@ switch($method) {
 
 function handleLogin($uri, $email) {
 
+    // Creates a folder to save the images that will be compared
     if(!file_exists(getcwd()."/tmp")) {
         mkdir("tmp");
     }
 
-    // Auto-install node_modules the first time that the plugins works
-    if(!file_exists(getcwd()."/node_modules")) {
-        exec("npm i");
+    // Load enviorment vars
+    $dotenv = Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+
+    $queryHandler = new QueryHandler();
+
+    $userPicture = $queryHandler->getUserPicture($email);
+
+    /*The value zero for the user picture in the moodle database is reserved
+     for the guest user.
+
+     For more information about the guest user, please see: https://docs.moodle.org/403/en/Guest_role
+     */
+    if($userPicture === 0) 
+    {
+        throw new Exception("User picture value can't be zero");
     }
 
-    $path = getcwd()."/faceIdHook.js";
-    $uriPath = getcwd()."/tmp/.uri";
+    // Gets user's profile image from the Moodle Fyle System
+    $profileImagePath = ImageHandler::getImageFromURL($userPicture, "profile.png");
 
-    $file = fopen($uriPath,"a");
-    file_put_contents($uriPath, $uri);
-    $output = null;
-    $code = null;
-    exec("node ".$path." ".$email, $output, $code);
-    if($code != 0) {
-        return "Error";
+    // Converts the uri recived in the HTTP request into an image
+    $photoTargetPath = "./tmp/login.png";
+    ImageHandler::base64ToImage($uri, $photoTargetPath);
+
+    if(FaceAnalyzer::compareFaces($profileImagePath, $photoTargetPath)) {
+        $id = $queryHandler->getUserId($email);
+        $password = $queryHandler->getUserPassword($email);
+        return array("id" => $id, "password" => $password);
     }else {
-        $credentials = array_slice($output, 5, 2);
-        // id
-        $splittedId = explode(":", $credentials[0]);
-        $idTag = trim($splittedId[0]);
-        $tmp = trim($splittedId[1]);
-        $idValue = str_replace(",", "", $tmp);
-
-        // password
-        $splittedPassword = explode(":", $credentials[1]);
-        $paswordTag = trim($splittedPassword[0]);
-        $tmp = trim($splittedPassword[1]);
-        $passwordValue = str_replace("'", "", $tmp);
-
-        return array($idTag => $idValue, $paswordTag => $passwordValue);
+        return "Error: Faces don't match";
     }
+    
 }
