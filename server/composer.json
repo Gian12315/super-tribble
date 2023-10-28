@@ -1,0 +1,12 @@
+{
+    "name": "faceid/server",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Faceid\\Server\\": "src/"
+        }
+    },
+    "require": {
+        "aws-project/stormwind": "main-dev"
+    }
+}

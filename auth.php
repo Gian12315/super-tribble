@@ -37,6 +37,15 @@ class auth_plugin_faceid extends auth_plugin_base {
     public function __construct() {
         $this->authtype = 'faceid';
         $this->config = get_config('auth_faceid');
+
+        // Creates a .env file to be accesded from the backed
+        $file = fopen("../auth/faceid/server/.env", "w");
+
+        // Writes the enviorments variables in the file.
+        //fwrite($file, "no");
+
+        fclose($file);
+
     }
 
 
