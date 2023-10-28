@@ -1,5 +1,5 @@
 server/tmp
-server/node_modules
+server/vendor
 server/logs
 .uri
 .env
