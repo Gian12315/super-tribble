@@ -41,11 +41,34 @@ class auth_plugin_faceid extends auth_plugin_base {
         // Creates a .env file to be accesded from the backed
         $file = fopen("../auth/faceid/server/.env", "w");
 
+        $keys = array("aws_public_key", "aws_region", "aws_secret_key", 
+                        "db_dialect", "db_host", "db_name", "db_password", 
+                        "db_user", "version");
+
         // Writes the enviorments variables in the file.
-        //fwrite($file, "no");
+        $configs = json_encode(get_config('auth_faceid'));
+        $configs = str_replace(":", " = ", $configs);
+        $configs = str_replace(",", "\n", $configs);
+        $configs = str_replace(array("{", "}", "\""), "", $configs);
+        $configs = str_replace($keys, $this -> array_to_upper($keys), $configs);
+        fwrite($file, $configs);
 
         fclose($file);
 
+    }
+
+    /**
+     * Converts the strings in an array to uppercase
+     * @param array $array The array to be converted
+     * @return array The array in uppercase
+     */
+
+    function array_to_upper($array) {
+        for ($i=0; $i < count($array); $i++) { 
+            $array[$i] = strtoupper($array[$i]);
+        }
+
+        return $array;
     }
 
 
