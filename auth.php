@@ -57,8 +57,6 @@ class auth_plugin_faceid extends auth_plugin_base {
             fclose($file);
         }
 
-        fclose($file);
-
     }
 
     /**
