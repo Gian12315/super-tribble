@@ -4,3 +4,4 @@ server/logs
 .uri
 .env
 .eslintrc.js
+composer.lock
