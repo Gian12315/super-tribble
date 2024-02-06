@@ -38,20 +38,24 @@ class auth_plugin_faceid extends auth_plugin_base {
         $this->authtype = 'faceid';
         $this->config = get_config('auth_faceid');
 
-        // Creates a .env file to be accesded from the backed
-        $file = fopen("../auth/faceid/server/.env", "w");
+        if(file_exists("./server/.env")) {
+            // Creates a .env file to be accesded from the backend
+            $file = fopen("./server/.env", "w");
 
-        $keys = array("aws_public_key", "aws_region", "aws_secret_key", 
-                        "db_dialect", "db_host", "db_name", "db_password", 
-                        "db_user", "version");
+            $keys = array("aws_public_key", "aws_region", "aws_secret_key", 
+                            "db_dialect", "db_host", "db_name", "db_password", 
+                            "db_user", "version");
 
-        // Writes the enviorments variables in the file.
-        $configs = json_encode(get_config('auth_faceid'));
-        $configs = str_replace(":", " = ", $configs);
-        $configs = str_replace(",", "\n", $configs);
-        $configs = str_replace(array("{", "}", "\""), "", $configs);
-        $configs = str_replace($keys, $this -> array_to_upper($keys), $configs);
-        fwrite($file, $configs);
+            // Writes the enviorments variables in the file.
+            $configs = json_encode($this->config);
+            $configs = str_replace(":", " = ", $configs);
+            $configs = str_replace(",", "\n", $configs);
+            $configs = str_replace(array("{", "}", "\""), "", $configs);
+            $configs = str_replace($keys, $this -> array_to_upper($keys), $configs);
+            fwrite($file, $configs);
+
+            fclose($file);
+        }
 
         fclose($file);
 
