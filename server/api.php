@@ -2,7 +2,7 @@
 
 require_once("./vendor/autoload.php");
 
-header("Conten-Type:application/json");
+header("Content-Type:application/json");
 
 use Stormwind\FaceAnalyzer;
 use Stormwind\QueryHandler;
